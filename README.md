@@ -2,7 +2,7 @@
 
 Free GitHub Pages deployment: upload this folder's files to a public repository root. In repository Settings → Pages, choose “Deploy from a branch”, `main`, and `/ (root)`. The root `index.html` is the app entry point; `.nojekyll` bypasses Jekyll. No server, paid hosting, package installation, or API key is required. GitHub Free Pages eligibility: https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages .
 
-Open `Connected-Chemistry.html` in a modern browser. No installation or internet is needed. Alternatively open `index.html` alongside its companion files. Either version can be hosted on a static web host.
+Open `Connected-Calculations.html` in a modern browser. No installation or internet is needed. Alternatively open `index.html` alongside its companion files. Either version can be hosted on a static web host.
 
 All seven chemistry networks run automatically in one workspace. Search and the connected-quantities checkbox filter the displayed fields; every equation continues solving. Solution concentration, dilution, molality, colligative properties, and osmotic pressure share solution measurements. Kinetics and Arrhenius share reaction quantities, with k₁ representing the rate at T₁. Gas and nuclear measurements remain distinct physical quantities. No topic selection is required.
 

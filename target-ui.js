@@ -12,4 +12,4 @@ $('targetSearch').oninput=renderTargetOptions;
 $('solventName').oninput=()=>{current().solventName=$('solventName').value;$('densityPreset').value='';};
 $('densityPreset').onchange=()=>{let preset=$('densityPreset').value;if(!preset)return;let s=current();s.solventName='Water';$('solventName').value='Water';s.inputs.solution_solventDensity=preset==='classroom'?'1.00':'0.99705';s.selected.solution_solventDensity='g/mL';if(s.precision)delete s.precision.solution_solventDensity;if(s.exact)delete s.exact.solution_solventDensity;update();};
 $('approximate').onchange=()=>{current().approximate=$('approximate').checked;render();};
-$('apply').onclick=apply;apply();render();
+render();

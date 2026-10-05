@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict'),E=require('./engine'),Q=require('./precision');
+const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-8*Math.max(1,Math.abs(b)),`${a} != ${b}`);
+const s=E.solve('all',{solution_mass:5.844,solution_M:58.44,solution_V:.5,solution_solvent:495,solution_i:2,solution_T:298.15,solution_Kf:1.86,solution_Kb:.512});near(s.values.solution_c,.2);near(s.values.solution_b,.1/.495);near(s.values.solution_osm,2*.2*.082057366*298.15);near(s.values.solution_df,2*1.86*.1/.495);assert.equal(s.values.gas_n,undefined);assert.equal(s.issues.length,0);
+const r=E.solve('all',{reaction_half:120,reaction_T1:298.15,reaction_T2:318.15,reaction_Ea:50000});near(r.values.reaction_k1,Math.log(2)/120);assert.ok(r.values.reaction_k2>r.values.reaction_k1);assert.equal(r.issues.length,0);
+assert.deepEqual(Q.read('2.00'),{sf:3,p:-2});assert.deepEqual(Q.read('0.00450'),{sf:3,p:-5});assert.deepEqual(Q.read('2.00e3'),{sf:3,p:1});assert.deepEqual(Q.read('2000'),{sf:1,p:3});
+let values={a:2.00,b:3.1},p={a:Q.base('2.00','—','plain','a'),b:Q.base('3.1','—','plain','b')};let product=Q.evaluate('a*b',values,p);assert.equal(Q.format(product.value,product,'—','plain','x'),'6.2');let sum=Q.evaluate('a+b',values,p);assert.equal(Q.format(sum.value,sum,'—','plain','x'),'5.1');
+let diff=Q.evaluate('a-b',{a:12.11,b:1.2},{a:Q.base('12.11','—','plain','a'),b:Q.base('1.2','—','plain','b')});assert.equal(Q.format(diff.value,diff,'—','plain','x'),'10.9');
+let temp=Q.base('25.00','°C','temp','solution_T');assert.equal(Q.format(298.15,temp,'K','temp','solution_T'),'298.15');assert.equal(Q.format(25,temp,'°C','temp','solution_T'),'25.00');
+let amount=Q.base('500.0','mL','volume','solution_V');near(amount.value,.5);assert.equal(Q.format(.5,amount,'L','volume','solution_V'),'0.5000');
+let logged=Q.evaluate('log(a)',{a:2},{a:Q.base('2.00','—','plain','a')});assert.equal(Q.format(logged.value,logged,'—','plain','x'),'0.301');
+let exact=Q.evaluate('a*b',values,{a:p.a,b:{value:3.1,p:-Infinity}});assert.equal(Q.format(exact.value,exact,'—','plain','x'),'6.20');
+let prec=Q.propagate(s,{solution_mass:Q.base('5.844','g','mass','solution_mass'),solution_M:Q.base('58.44','g/mol','molarMass','solution_M'),solution_V:amount});assert.equal(Q.format(s.values.solution_c,prec.solution_c,'mol/L','concentration','solution_c'),'0.2000');
+console.log('Passed: unified cross-topic solving, physical-system isolation, significant figures, decimal-place arithmetic, exact quantities, logs, temperature and volume conversion precision.');

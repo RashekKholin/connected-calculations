@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),E=require('./engine'),P=require('./planner');const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-8,`${a} != ${b}`);
+let s=E.solve('all',{solution_n:.1,solution_solventDensity:997.05,solution_solventVolume:.5});near(s.values.solution_solvent,498.525);near(s.values.solution_b,.1/.498525);assert.equal(s.issues.length,0);
+s=E.solve('all',{solution_mass:5.844,solution_M:58.44,solution_V:.5,solution_density:1000});near(s.values.solution_solvent,494.156);near(s.values.solution_b,.1/.494156);assert.equal(s.issues.length,0);
+s=E.solve('all',{solution_c:.2,solution_M:58.44,solution_density:1000});near(s.values.solution_b,200/(1000-.2*58.44));assert.equal(s.issues.length,0);
+s=E.solve('all',{solution_massPercent:10,solution_M:100});near(s.values.solution_b,1000*10/(100*90));assert.equal(s.issues.length,0);
+s=E.solve('all',{solution_n:.1,solution_V:.5,solution_solventDensity:1000});assert.equal(s.values.solution_b,undefined);
+const approx={...E.groups.all,eqs:[...E.groups.all.eqs,{label:'Approximation',forms:{solution_solventVolume:'solution_V',solution_V:'solution_solventVolume'}}]};
+s=E.solve('all',{solution_n:.1,solution_V:.5,solution_solventDensity:789},approx);near(s.values.solution_b,.1/.3945);assert.equal(s.issues.length,0);
+near(E.convert(1,'g/mL','density','d'),1000);near(E.convert(997,'kg/m³','density','d'),997);
+const plans=P.plan(E.groups.all,{solution_n:.1,solution_V:.5,solution_solventDensity:1000},'solution_b');assert.ok(plans.some(p=>p.missing.includes('solution_solventVolume')));
+assert.ok(E.solve('all',{solution_totalMass:10,solution_mass:20}).issues.length);
+console.log('Passed: pure solvent and solution density, direct molarity and mass-percent routes, custom solvents, unit conversion, invalid mass balance, and approximation disabled by default.');

@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),E=require('./engine');require('./sciences');const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-6,`${a} != ${b}`);
+let s=E.solve('all',{motion_u:10,motion_a:-2,motion_t:3});near(s.values.motion_vf,4);near(s.values.motion_d,21);near(s.values.motion_v,7);assert.equal(s.issues.length,0);
+s=E.solve('all',{mechanics_m:2,mechanics_v:3,mechanics_a:4,mechanics_d:5,mechanics_t:2});near(s.values.mechanics_KE,9);near(s.values.mechanics_F,8);near(s.values.mechanics_W,40);near(s.values.mechanics_P,20);
+s=E.solve('all',{wave_f:100,wave_lambda:2});near(s.values.wave_v,200);near(s.values.wave_period,.01);
+s=E.solve('all',{circuit_V:12,circuit_R:6,circuit_t:10});near(s.values.circuit_I,2);near(s.values.circuit_P,24);near(s.values.circuit_Q,20);near(s.values.circuit_energy,240);
+s=E.solve('all',{population_N0:100,population_doubling:10,population_t:20});near(s.values.population_N,400);
+s=E.solve('all',{logistic_N0:100,logistic_K:1000,logistic_r:.1,logistic_t:10});near(s.values.logistic_N,1000/(1+9*Math.exp(-1)));
+s=E.solve('all',{enzyme_vmax:10,enzyme_S:2,enzyme_Km:3});near(s.values.enzyme_v,4);
+s=E.solve('all',{genetics_p:.6});near(s.values.genetics_q,.4);near(s.values.genetics_AA,.36);near(s.values.genetics_Aa,.48);near(s.values.genetics_aa,.16);assert.equal(s.issues.length,0);assert.equal(E.valid('genetics_p',1.2,'all'),false);
+s=E.solve('all',{absorbance_epsilon:100,absorbance_l:.01,absorbance_c:.5});near(s.values.absorbance_A,.5);near(s.values.absorbance_transmission,Math.pow(10,-.5));
+console.log('Passed: physics and biology networks, signed motion, inverse chains, and model constraints.');

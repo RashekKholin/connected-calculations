@@ -1,4 +1,4 @@
-# Connected Chemistry Calculator
+# Connected Calculations
 
 Free GitHub Pages deployment: upload this folder's files to a public repository root. In repository Settings → Pages, choose “Deploy from a branch”, `main`, and `/ (root)`. The root `index.html` is the app entry point; `.nojekyll` bypasses Jekyll. No server, paid hosting, package installation, or API key is required. GitHub Free Pages eligibility: https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages .
 
@@ -29,3 +29,8 @@ Any solvent can be named and its density supplied manually. Optional water prese
 Solution volume and solvent volume are distinct. An optional checkbox explicitly permits solvent volume ≈ solution volume for a dilute solution when negligible solute-induced volume change is allowed. The assumption appears in derivation trails and is disabled by default. It works with any supplied solvent density; it never sets solution density equal to pure solvent density. Turning it off recalculates and removes results that relied on it. This approximation computes solvent mass from approximately equal volumes; it does not subtract solute mass from the inferred solvent mass. Verify the exact and approximate routes with `node test-density.js` and the UI tests.
 
 Solute and gas formula inputs calculate molar mass automatically and feed the appropriate network. Supports nested parentheses/brackets, Unicode subscripts, hydrates (`CuSO4·5H2O`), optional phase suffixes, and explicit charges (`Fe^3+`, `SO4^2-`). Case-sensitive element symbols use CIAAW's 2024 abridged standard atomic weights: https://www.ciaaw.org/abridged-atomic-weights.htm . Formula-derived mass includes a calculation trail and precision from the table's decimal places. If a manually supplied molar mass disagrees, a conflict is shown and the manual value is retained. Elements without standard atomic weights require manually supplied isotope-specific molar mass. Formula input does not infer dissociation factors or balance reactions. Verify these features with `node test-goals.js` and `node test-ui.js`.
+
+
+## Physics and biology
+
+The sciences.js library adds signed one-dimensional kinematics, force, energy, work, power, waves, DC circuits, exponential and logistic population growth, Michaelis–Menten enzyme kinetics, Hardy–Weinberg genotype frequencies, and Beer–Lambert spectrophotometry. All are searched and solved in the same workspace; target planning and significant figures apply. Assumptions are shown beside each equation in the equations panel. Distinct systems retain separate measurements. This is an introductory library, not every possible equation in either field; inverse branches are explicitly supplied, and multivalued/simultaneous algebra may remain unresolved. Spectrophotometry path length uses meters; absorptivity uses L/(mol·m). Verify with node test-sciences.js.

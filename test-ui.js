@@ -2,7 +2,7 @@
 const fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');
 const elements={};function el(id){return elements[id]||=new Element(id);}
 class Element{constructor(id){this.id=id;this.value='';this.checked=false;this.hidden=false;this.children={};}set innerHTML(x){this.html=x;if(this.id==='fields'){for(const m of x.matchAll(/id="(field-|input-)(\w+)"/g))elements[m[1]+m[2]]=new Element(m[1]+m[2]);}}get innerHTML(){return this.html||'';}querySelector(s){return this.children[s]||=new Element(s);}setAttribute(){}showModal(){this.open=true;}close(){this.open=false;}}
-const context=vm.createContext({document:{getElementById:el},console});for(const f of ['engine.js','precision.js','planner.js','chemistry.js','app.js','target-ui.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),context);
+const context=vm.createContext({document:{getElementById:el},console});for(const f of ['engine.js','sciences.js','precision.js','planner.js','chemistry.js','app.js','target-ui.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),context);
 assert.equal(el('title').textContent,'All connected equations');assert.ok(!fs.readFileSync(__dirname+'/index.html','utf8').includes('id="tabs"'));
 el('example').onclick();assert.equal(el('input-solution_c').value,'0.2');el('sigfig').checked=true;el('sigfig').onchange();assert.equal(el('input-solution_c').value,'0.2000');
 el('fields').onchange({target:{dataset:{unit:'solution_V'},value:'L'}});assert.equal(el('input-solution_V').value,'0.5000');assert.equal(el('input-solution_c').value,'0.2000');

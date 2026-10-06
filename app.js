@@ -21,7 +21,7 @@ $('example').onclick=()=>{state[topic]=JSON.parse(JSON.stringify(examples[topic]
 // Initial render occurs after target and chemistry helpers load.
 
 
-function filterFields(){let query=$('search').value.toLowerCase().trim(),g=group(),connected=new Set(Object.keys(result.values));for(const e of g.eqs){let ids=new Set([...Object.keys(e.forms),...Object.values(e.forms).flatMap(expr=>E.parse(expr).deps)]);if([...ids].some(id=>Object.hasOwn(result.values,id)))ids.forEach(id=>connected.add(id));}let count=0;for(const v of g.vars){const visible=(!current().focus||current().focus.has(v.id))&&(v.label+' '+v.id+' '+(v.context||'')).toLowerCase().includes(query)&&(!$('relevant').checked||connected.has(v.id));$('field-'+v.id).hidden=!visible;if(visible)count++;}$('empty').hidden=count>0;}
+function filterFields(){let query=$('search').value.toLowerCase().trim(),g=group(),s=current(),visibleIds=new Set([...Object.keys(result.values),...(s.added||[])]);if(s.target)visibleIds.add(s.target);if(s.focus)s.focus.forEach(id=>visibleIds.add(id));else if(s.target&&answerPlans.length)answerPlans[0].missing.forEach(id=>visibleIds.add(id));let count=0;for(const v of g.vars){const matches=(v.label+' '+v.id+' '+(v.context||'')).toLowerCase().includes(query);const visible=query?matches:!$('relevant').checked||visibleIds.has(v.id);$('field-'+v.id).hidden=!visible;if(visible)count++;}$('empty').hidden=count>0;}
 $('search').oninput=()=>{current().focus=null;filterFields();};$('relevant').onchange=()=>{current().focus=null;filterFields();};$('sigfig').onchange=()=>update();
 
 

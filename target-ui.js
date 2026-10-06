@@ -8,8 +8,16 @@ answerPlans=ChemPlanner.plan(group(),result.values,target);$('goalStatus').inner
 $('answerTarget').onchange=()=>{current().target=$('answerTarget').value;current().focus=null;updateGoal();filterFields();};
 for(const kind of ['solute','gas'])$(kind+'Formula').oninput=()=>{current().chemical||={};current().chemical[kind]=$(kind+'Formula').value;update();};
 $('goalStatus').onclick=e=>{if(e.target.dataset.answerTrail){$('fields').onclick({target:{dataset:{trail:e.target.dataset.answerTrail}}});}if(e.target.dataset.focusPlan!==undefined){let p=answerPlans[Number(e.target.dataset.focusPlan)];if(p){current().focus=new Set([...p.missing,current().target,...p.steps.map(s=>s.id)]);$('search').value='';$('relevant').checked=false;filterFields();$('fields').scrollIntoView?.({behavior:'smooth',block:'start'});}}};
-$('targetSearch').oninput=renderTargetOptions;
+$('targetSearch').oninput=()=>{renderTargetOptions();const raw=$('targetSearch').value.trim();const match=group().vars.find(v=>v.label===raw);if(match){current().target=match.id;current().focus=null;updateGoal();filterFields();$('targetMatches').textContent='Answer selected. Missing inputs appear automatically below.';}else if(!raw){current().target='';current().focus=null;updateGoal();filterFields();$('targetMatches').textContent='Optional: choose an answer to see what’s missing.';}else $('targetMatches').textContent='Choose a matching quantity from the dropdown.';};
 $('solventName').oninput=()=>{current().solventName=$('solventName').value;$('densityPreset').value='';};
 $('densityPreset').onchange=()=>{let preset=$('densityPreset').value;if(!preset)return;let s=current();s.solventName='Water';$('solventName').value='Water';s.inputs.solution_solventDensity=preset==='classroom'?'1.00':'0.99705';s.selected.solution_solventDensity='g/mL';if(s.precision)delete s.precision.solution_solventDensity;if(s.exact)delete s.exact.solution_solventDensity;update();};
 $('approximate').onchange=()=>{current().approximate=$('approximate').checked;render();};
+const originalSetupGoals=setupGoals;
+setupGoals=function(){originalSetupGoals();$('targetQuantities').innerHTML=group().vars.map(v=>`<option value="${esc(v.label)}"></option>`).join('');$('targetSearch').value=group().vars.find(v=>v.id===current().target)?.label||'';};
+const originalSearch=$('search').oninput;
+$('search').oninput=()=>{const match=group().vars.find(v=>v.label===$('search').value.trim());if(match){current().added||=[];if(!current().added.includes(match.id))current().added.push(match.id);$('search').value='';filterFields();$('input-'+match.id).focus?.();$('field-'+match.id).scrollIntoView?.({behavior:'smooth',block:'nearest'});}else originalSearch();};
+const originalReset=$('reset').onclick;
+$('reset').onclick=()=>{$('search').value='';$('targetSearch').value='';originalReset();};
+const originalUpdateGoal=updateGoal;
+updateGoal=function(){originalUpdateGoal();const host=$('goalStatus');if(answerPlans.length>1){const html=host.innerHTML,start=html.indexOf('<div class="answer-route">'),second=html.indexOf('<div class="answer-route">',start+1),end=html.lastIndexOf('<p class="muted">Routes follow');if(second>=0&&end>=0)host.innerHTML=html.slice(0,second)+'<details class="alternative-routes"><summary>Other ways to reach this answer</summary>'+html.slice(second,end)+'</details>'+html.slice(end);}if(!current().target&&Object.keys(result.values).length)host.innerHTML='<p class="muted">Your calculated values appear alongside your inputs. Choose an answer above for focused guidance.</p>';};
 render();

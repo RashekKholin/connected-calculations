@@ -32,3 +32,4 @@ el('search').value=labels.find(v=>v.id==='solution_mass').label;el('search').oni
 el('targetSearch').value=labels.find(v=>v.id==='solution_c').label;el('targetSearch').oninput();assert.ok(el('goalStatus').innerHTML.includes('Route 1'));assert.equal(el('field-solution_c').hidden,false);assert.ok(el('goalStatus').innerHTML.includes('Other ways'));
 el('reset').onclick();assert.equal(el('targetSearch').value,'');assert.equal(el('field-solution_mass').hidden,true);
 console.log('Passed: streamlined empty state, searchable quantity selection, direct answer selection, automatic missing inputs, alternative routes and complete reset.');
+const markup=fs.readFileSync(__dirname+'/index.html','utf8');assert.equal((markup.match(/<details\b/g)||[]).length,(markup.match(/<\/details>/g)||[]).length);assert.ok(markup.includes('</details><div class="legend">'));

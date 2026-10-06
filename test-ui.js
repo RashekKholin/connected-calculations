@@ -25,3 +25,10 @@ el('fields').onclick({target:{dataset:{trail:'solution_b'}}});assert.ok(el('trai
 el('solventName').value='Ethanol';el('solventName').oninput();el('fields').oninput({target:{dataset:{input:'solution_solventDensity'},value:'0.789'}});el('fields').oninput({target:{dataset:{input:'solution_solventVolume'},value:'0.500'}});assert.equal(el('input-solution_b').value,'0.253');
 el('reset').onclick();assert.equal(el('approximate').checked,false);assert.equal(el('solventName').value,'');
 console.log('Passed: independent target search, density presets, explicit approximation and revocation, solvent density, non-water solvents, and reset.');
+el('relevant').checked=true;el('reset').onclick();assert.equal(el('field-nuclear_half').hidden,true);
+el('search').value='Solution · Solute mass';
+const labels=vm.runInContext('group().vars.map(v=>({id:v.id,label:v.label}))',context);
+el('search').value=labels.find(v=>v.id==='solution_mass').label;el('search').oninput();assert.equal(el('search').value,'');assert.equal(el('field-solution_mass').hidden,false);
+el('targetSearch').value=labels.find(v=>v.id==='solution_c').label;el('targetSearch').oninput();assert.ok(el('goalStatus').innerHTML.includes('Route 1'));assert.equal(el('field-solution_c').hidden,false);assert.ok(el('goalStatus').innerHTML.includes('Other ways'));
+el('reset').onclick();assert.equal(el('targetSearch').value,'');assert.equal(el('field-solution_mass').hidden,true);
+console.log('Passed: streamlined empty state, searchable quantity selection, direct answer selection, automatic missing inputs, alternative routes and complete reset.');

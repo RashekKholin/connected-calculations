@@ -18,7 +18,7 @@ Verification: `node test.js`, `node test-upgrade.js`, and `node test-ui.js`. The
 
 Choose “What do you want to find?” to select a final answer. The helper traces the equation network backward and lists up to five alternative minimal sets of missing quantities, with a route to the answer and a button to show those input fields. It never asks you to enter the target itself. Plans describe structural solvability; numerical degeneracies and model assumptions still apply. Search for any quantity to exit a route's field filter. The planner retains up to sixteen candidate sets per variable, so alternatives are bounded rather than exhaustive.
 
-The final-answer selector has its own search box. Searching targets filters the answer options without changing the separate input-field filter or solving network.
+The public workspace starts with two searchable dropdowns. “Add a known value” adds a field and focuses its value input. “What do you want to find?” selects the answer directly, without a second selector. The first missing-input route appears automatically; other routes are expandable. Initially empty fields are hidden. Options include a switch to browse every quantity, significant figures, chemical formulas and solvent assumptions. Reset clears the selected answer, search and inputs. Every equation continues to run regardless of field visibility. Inputs remain in the browser only and clear on reload.
 
 ## Density and solvent pathways
 

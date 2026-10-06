@@ -13,7 +13,7 @@ $('solventName').oninput=()=>{current().solventName=$('solventName').value;$('de
 $('densityPreset').onchange=()=>{let preset=$('densityPreset').value;if(!preset)return;let s=current();s.solventName='Water';$('solventName').value='Water';s.inputs.solution_solventDensity=preset==='classroom'?'1.00':'0.99705';s.selected.solution_solventDensity='g/mL';if(s.precision)delete s.precision.solution_solventDensity;if(s.exact)delete s.exact.solution_solventDensity;update();};
 $('approximate').onchange=()=>{current().approximate=$('approximate').checked;render();};
 const originalSetupGoals=setupGoals;
-setupGoals=function(){originalSetupGoals();$('targetQuantities').innerHTML=group().vars.map(v=>`<option value="${esc(v.label)}"></option>`).join('');$('targetSearch').value=group().vars.find(v=>v.id===current().target)?.label||'';};
+setupGoals=function(){originalSetupGoals();$('targetQuantities').innerHTML=group().vars.map(v=>`<option value="${esc(v.label)}"></option>`).join('');$('targetSearch').value=group().vars.find(v=>v.id===current().target)?.label||'';$('targetMatches').textContent=current().target?'Answer selected. Missing inputs appear automatically below.':'Optional: choose an answer to see what’s missing.';};
 const originalSearch=$('search').oninput;
 $('search').oninput=()=>{const match=group().vars.find(v=>v.label===$('search').value.trim());if(match){current().added||=[];if(!current().added.includes(match.id))current().added.push(match.id);$('search').value='';filterFields();$('input-'+match.id).focus?.();$('field-'+match.id).scrollIntoView?.({behavior:'smooth',block:'nearest'});}else originalSearch();};
 const originalReset=$('reset').onclick;

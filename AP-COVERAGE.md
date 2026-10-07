@@ -2,7 +2,7 @@
 
 Reviewed against College Board's public reference hub and course pages on October 5, 2026. This is an independent learning calculator, not a College Board exam calculator or a guarantee that every exam problem can be solved.
 
-The automatic network contains 942 named quantities and 394 equation relationships. Multiple explicit rearrangements are supplied for many relationships. Values for unrelated systems remain distinct. Searching “AP formulas & official references” searches these relationships plus general function, vector, integral, and series identities. Reference-only entries explain their computational limits.
+The automatic network contains 2,650 named quantities and 1,194 equation relationships (including the October 6 expansion). Multiple explicit rearrangements are supplied for many relationships. Values for unrelated systems remain distinct. Searching “Equation library & AP references” searches these relationships plus general function, vector, integral, and series identities. Reference-only entries explain their computational limits.
 
 | Subject | Automatic calculation coverage | Additional references / limits |
 |---|---|---|

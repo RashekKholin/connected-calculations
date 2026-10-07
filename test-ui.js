@@ -2,7 +2,7 @@
 const fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');
 const elements={};function el(id){return elements[id]||=new Element(id);}
 class Element{constructor(id){this.id=id;this.value='';this.checked=false;this.hidden=false;this.children={};}set innerHTML(x){this.html=x;if(this.id==='fields'){for(const m of x.matchAll(/id="(field-|input-)(\w+)"/g))elements[m[1]+m[2]]=new Element(m[1]+m[2]);}}get innerHTML(){return this.html||'';}querySelector(s){return this.children[s]||=new Element(s);}setAttribute(){}showModal(){this.open=true;}close(){this.open=false;}}
-const context=vm.createContext({document:{getElementById:el},console});for(const f of ['engine.js','sciences.js','expanded.js','ap-library.js','math-tools.js','precision.js','planner.js','chemistry.js','app.js','target-ui.js','data-ui.js','ap-reference.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),context);
+const context=vm.createContext({document:{getElementById:el},console});for(const f of ['engine.js','sciences.js','expanded.js','ap-library.js','math-tools.js','catalogue-units.js','scalar-inverses.js','library-growth.js','precision.js','planner.js','chemistry.js','app.js','target-ui.js','data-ui.js','ap-reference.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),context);
 assert.equal(el('title').textContent,'All connected equations');assert.ok(!fs.readFileSync(__dirname+'/index.html','utf8').includes('id="tabs"'));
 el('example').onclick();assert.equal(el('input-solution_c').value,'0.2');el('sigfig').checked=true;el('sigfig').onchange();assert.equal(el('input-solution_c').value,'0.2000');
 el('fields').onchange({target:{dataset:{unit:'solution_V'},value:'L'}});assert.equal(el('input-solution_V').value,'0.5000');assert.equal(el('input-solution_c').value,'0.2000');
@@ -38,3 +38,12 @@ el('reset').onclick();el('mathExpression').value='x^2';el('mathExpression').onin
 el('reset').onclick();el('answerTarget').value='loan_payment';el('answerTarget').onchange();el('fields').oninput({target:{dataset:{input:'loan_P'},value:'1200'}});el('fields').oninput({target:{dataset:{input:'loan_r'},value:'0'}});el('fields').oninput({target:{dataset:{input:'loan_n'},value:'12'}});assert.equal(Number(el('input-loan_payment').value),100);
 assert.ok(el('referenceResults').innerHTML.includes('Gauss'));el('referenceSearch').value='Gauss';el('referenceSearch').oninput();assert.ok(!el('referenceResults').innerHTML.includes('Discounted'));
 console.log('Passed: raw-data integration, numeric calculus integration, source trails, zero-interest loan UI and searchable AP reference library.');
+el('reset').onclick();el('sigfig').checked=false;el('sigfig').onchange();el('targetSearch').value='Finance · Loans and repayment planning · Balance after next payment';el('targetSearch').oninput();
+for(const [id,value]of [['ext31_balance','1000'],['ext31_r','0.01'],['ext31_payment','100']])el('fields').oninput({target:{dataset:{input:id},value}});
+assert.ok(el('goalStatus').innerHTML.includes('910 currency units'));
+assert.ok(el('goalStatus').innerHTML.includes('Equation used'));
+assert.ok(el('goalStatus').innerHTML.includes('nextBalance = balance*(1+r)-payment'));
+assert.ok(el('goalStatus').innerHTML.includes('(1000)*(1+(0.01))-(100)'));
+assert.ok(el('goalStatus').innerHTML.includes('Model:'));
+el('reset').onclick();assert.ok(!el('goalStatus').innerHTML.includes('Equation used'));
+console.log('Passed: expanded catalogue target, automatic visible equation, numeric substitution, assumptions and reset.');
